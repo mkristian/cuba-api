@@ -1,0 +1,24 @@
+PATH
+  remote: .
+  specs:
+    cuba-api (0.1.0)
+      cuba (~> 3.1)
+      ixtlan-babel (~> 0.2.0)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    cuba (3.1.0)
+      rack
+    ixtlan-babel (0.2.0)
+    minitest (4.3.3)
+    mustard (0.1.0)
+    rack (1.4.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cuba-api!
+  minitest (~> 4.3.0)
+  mustard (~> 0.1)
