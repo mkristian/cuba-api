@@ -34,10 +34,10 @@ describe CubaApi::CurrentUser do
   it 'should authenticate' do
      _, _, resp = Cuba.call({})
     
-    resp.must.eq ["logged in - ???"]
+    resp.join.must.eq "logged in - ???"
 
      _, _, resp = Cuba.call({})
     
-    resp.must.eq ["user1"]
+    resp.join.must.eq "user1"
   end
 end

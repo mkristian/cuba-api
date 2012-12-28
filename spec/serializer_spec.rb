@@ -36,6 +36,7 @@ describe CubaApi::Serializer do
   it 'should write out yaml' do
      _, _, resp = Cuba.call({})
     
-    resp.must.eq ["---\nname: me and the corner\n"]
+    resp[ 0 ] = resp[ 0 ].sub(/.*\n/, "---\n")
+    resp.must_equal ["---\nname: me and the corner\n"]
   end
 end

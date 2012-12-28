@@ -36,7 +36,7 @@ describe CubaApi::WriteAspect do
   
   it 'should execute aspects in the right order' do
      _, _, resp = Cuba.call({})
-    
-    resp.must.eq ["start-two-one-three"]
+
+    resp.join.must.eq "start-two-one-three"
   end
 end

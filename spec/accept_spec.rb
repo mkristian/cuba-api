@@ -26,13 +26,16 @@ describe CubaApi::AcceptContent do
 
   it 'creates yaml' do
      _, _, resp = Cuba.call({"SCRIPT_NAME" => "/bla.yaml"})
-    resp.must.eq ["--- !ruby/object:B {}\n"]
+    resp[ 0 ] = resp[ 0 ].sub(/.*!/, "---!").sub( /\n\n/, "\n")
+    resp.join.must.eq "---!ruby/object:B {}\n"
 
     _, _, resp = Cuba.call({"HTTP_ACCEPT" => "application/x-yaml"})
-    resp.must.eq ["--- !ruby/object:B {}\n"]
+    resp[ 0 ] = resp[ 0 ].sub(/.*!/, "---!").sub( /\n\n/, "\n")
+    resp.join.must.eq "---!ruby/object:B {}\n"
 
     _, _, resp = Cuba.call({"HTTP_ACCEPT" => "text/yaml"})
-    resp.must.eq ["--- !ruby/object:B {}\n"]
+    resp[ 0 ] = resp[ 0 ].sub(/.*!/, "---!").sub( /\n\n/, "\n")
+    resp.join.must.eq "---!ruby/object:B {}\n"
   end
 
   it 'gives not found for not configured xml' do
@@ -45,7 +48,8 @@ describe CubaApi::AcceptContent do
 
   it 'gives preference to script extension' do
     _, _, resp = Cuba.call({"SCRIPT_NAME" => "/bla.yaml", "HTTP_ACCEPT" => "application/xml"})
-    resp.must.eq ["--- !ruby/object:B {}\n"]
+    resp[ 0 ] = resp[ 0 ].sub(/.*!/, "---!").sub( /\n\n/, "\n")
+    resp.join.must.eq "---!ruby/object:B {}\n"
 
     status, _, _ = Cuba.call({"SCRIPT_NAME" => "/bla.xml", "HTTP_ACCEPT" => "application/x-yaml"})
     status.must.eq 404
