@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "copyright-header", '~> 1.0.7'
   s.add_development_dependency "minitest", '~> 4.3.0'
   s.add_development_dependency 'mustard', '~> 0.1'
+  s.add_development_dependency 'rake', '~> 10.0.3'
 end
 
 # vim: syntax=Ruby
