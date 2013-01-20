@@ -18,7 +18,7 @@ class E
   end
 
   def to_s
-    @attributes.to_s + @errors.to_s
+    @attributes.inspect + @errors.inspect
   end
 end
 
