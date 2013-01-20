@@ -61,7 +61,7 @@ describe CubaApi::ResponseStatus do
   it 'status 204' do
     status, _, resp = Cuba.call({'REQUEST_METHOD' => 'DELETE'})
     status.must.eq 204
-    resp.join.must.eq ""
+    resp.join.must_be :empty?
   end
 
   it 'status 412' do
