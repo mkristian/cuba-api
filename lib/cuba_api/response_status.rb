@@ -7,7 +7,9 @@ module CubaApi
           obj = obj.errors
         elsif req.post?
           res.status = 201 # Created
-          res[ 'Location' ] = env[ 'SCRIPT_NAME' ] + "/#{obj.id}" if obj.respond_to? :id
+          if obj.respond_to? :id
+            res[ 'Location' ] = env[ 'SCRIPT_NAME' ] + "/#{obj.id}"
+          end
         elsif req.delete?
           res.status = 204 # No Content
           obj = ''
