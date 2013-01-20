@@ -51,6 +51,7 @@ module CubaApi
       (aspects + self.class[ :aspects ]).uniq.each do |w|
         obj = send( w, obj, options ) if obj
       end
+p obj if obj.is_a? Hash
       res.write obj.to_s
     end
   end

@@ -4,8 +4,17 @@ require 'cuba_api/config'
 require 'cuba_api/response_status'
 
 class E
+
+  def id
+    4711
+  end
+
   def initialize( args = nil )
     @errors = (args || {}).delete( :errors ) || {}
+    # ruby18 workaround
+    def @errors.to_s
+      inspect
+    end
     @attributes = args
   end
     
