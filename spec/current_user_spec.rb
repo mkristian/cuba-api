@@ -19,7 +19,7 @@ describe CubaApi::CurrentUser do
     Cuba.reset!
     Cuba.plugin CubaApi::Config
     Cuba.plugin CubaApi::CurrentUser
-    Cuba.use Rack::Session::Cookie, :secret => ''
+    Cuba.use Rack::Session::Cookie, :secret => 'asd'
     Cuba[ :sessions ] = SessionManager.new
     Cuba.define do
       on authenticated? do
