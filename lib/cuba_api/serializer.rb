@@ -34,7 +34,7 @@ module CubaApi
       if options[:serializer] == false || obj.is_a?( String )
         obj
       else
-        s = self.class.serializer_factory.new( obj )
+        s = self.class.serializer_factory.new_serializer( obj )
         s.use( options[ :use ] ) if options[ :use ]
         s
       end

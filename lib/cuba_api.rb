@@ -27,6 +27,8 @@ require 'cuba_api/current_user'
 require 'cuba_api/guard'
 require 'cuba_api/accept_content'
 require 'cuba_api/config'
+require 'cuba_api/input_filter'
+require 'cuba_api/response_status'
 
 class CubaAPI < Cuba
 
@@ -36,5 +38,7 @@ class CubaAPI < Cuba
   plugin CubaApi::AcceptContent
   plugin CubaApi::CurrentUser
   plugin CubaApi::Guard
+  plugin CubaApi::InputFilter
+  plugin CubaApi::ResponseStatus
 
 end

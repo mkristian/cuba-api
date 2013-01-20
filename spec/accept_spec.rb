@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'cuba_api/config'
 require 'cuba_api/write_aspect'
 require 'cuba_api/accept_content'
+require 'yaml'
 
 class B
   def method_missing( method, *args )

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cuba_api/config'
 require 'cuba_api/write_aspect'
 require 'cuba_api/serializer'
 require 'yaml'
@@ -21,6 +22,7 @@ describe CubaApi::Serializer do
 
   before do
     Cuba.reset!
+    Cuba.plugin CubaApi::Config
     Cuba[ :aspects ] = []
     Cuba.plugin CubaApi::WriteAspect
     Cuba.plugin CubaApi::Serializer

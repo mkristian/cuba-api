@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cuba_api/config'
 require 'cuba_api/current_user'
 
 class SessionManager
@@ -16,8 +17,9 @@ describe CubaApi::CurrentUser do
 
   before do
     Cuba.reset!
+    Cuba.plugin CubaApi::Config
     Cuba.plugin CubaApi::CurrentUser
-    Cuba.use Rack::Session::Cookie
+    Cuba.use Rack::Session::Cookie, :secret => ''
     Cuba[ :sessions ] = SessionManager.new
     Cuba.define do
       on authenticated? do

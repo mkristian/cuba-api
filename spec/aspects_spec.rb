@@ -18,8 +18,8 @@ describe CubaApi::WriteAspect do
 
   before do
     Cuba.reset!
-    Cuba[ :aspects ] = []
     Cuba.plugin CubaApi::Config
+    Cuba[ :aspects ] = []
     Cuba.plugin CubaApi::WriteAspect
     Cuba.plugin Plugin
     Cuba.append_aspect :one
