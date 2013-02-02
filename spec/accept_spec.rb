@@ -27,6 +27,8 @@ describe CubaApi::AcceptContent do
   end
 
   it 'creates yaml' do
+    skip("to_yaml add extra line with ...") if defined?( JRUBY_VERSION ) and (( JRUBY_VERSION =~ /^1.6./ ) == 0 ) and ( nil == (RUBY_VERSION =~ /^1.8/) )
+
      _, _, resp = Cuba.call({"SCRIPT_NAME" => "/bla.yaml"})
     resp[ 0 ] = resp[ 0 ].sub(/.*!/, "---!").sub( /\n\n/, "\n")
     resp.join.must.eq "---!ruby/object:B {}\n"
@@ -49,6 +51,8 @@ describe CubaApi::AcceptContent do
   end
 
   it 'gives preference to script extension' do
+    skip("to_yaml add extra line with ...") if defined?( JRUBY_VERSION ) and (( JRUBY_VERSION =~ /^1.6./ ) == 0 ) and ( nil == (RUBY_VERSION =~ /^1.8/) )
+
     _, _, resp = Cuba.call({"SCRIPT_NAME" => "/bla.yaml", "HTTP_ACCEPT" => "application/xml"})
     resp[ 0 ] = resp[ 0 ].sub(/.*!/, "---!").sub( /\n\n/, "\n")
     resp.join.must.eq "---!ruby/object:B {}\n"
