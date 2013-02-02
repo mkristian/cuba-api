@@ -31,6 +31,9 @@ module CubaApi
       def accept( *args )
         args.each do |arg|
           (MIMES[ arg ] || []).each do |mime|
+            if arg == :yaml
+              require 'safe_yaml' unless defined?( YAML )
+            end
             mimes[ mime ] = "to_#{arg}".to_sym
           end
         end
