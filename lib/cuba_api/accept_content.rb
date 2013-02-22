@@ -46,26 +46,15 @@ module CubaApi
     end
 
     def accept_content( obj, options = {} )
-      script = env[ 'SCRIPT_NAME' ]
-      if script =~ /\./
-        extension = script.sub( /^.*\./, '' )
-        mime = ClassMethods::MIMES[ extension.to_sym ] || []
-        _accept( obj, mime.first )
-      else
-        _accept( obj, env[ 'HTTP_ACCEPT' ] )
-      end
-    end
-
-    def _accept( obj, mime )
+      mime = env[ 'HTTP_ACCEPT' ]
       if self.class.mimes.key?( mime )
         res[ "Content-Type" ] = mime + "; charset=utf-8"
         obj.send self.class[ :mimes ][ mime ]
       else
-        head 404
+        head :not_found
         nil
       end
     end
-    private :_accept
 
     def self.included( base )
       base.append_aspect :accept_content
