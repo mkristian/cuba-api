@@ -40,8 +40,9 @@ module CubaApi
     end
 
     def head( status )
-      res.status = status
-      res.write ''
+      res.status = Rack::Utils.status_code( status )
+      res.write Rack::Utils::HTTP_STATUS_CODES[ res.status ]
+      res['Content-Type' ] = 'text/plain'
     end
 
     def write( obj, options = {} )
