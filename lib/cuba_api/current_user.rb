@@ -33,10 +33,10 @@ module CubaApi
 
     def current_user( user = nil )
       if user
-        session['user'] =  self.class.sessions.to_session( user )
+        session[ 'user' ] =  self.class.sessions.to_session( user )
         @_current_user = user
-      else
-        @_current_user ||= self.class.sessions.from_session( session['user'] )
+      elsif env[ 'rack.session' ]
+        @_current_user ||= self.class.sessions.from_session( session[ 'user' ] )
       end
     end
 

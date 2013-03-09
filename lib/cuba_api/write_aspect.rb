@@ -40,8 +40,9 @@ module CubaApi
     end
 
     def head( status )
-      res.status = status
-      res.write ''
+      res.status = Rack::Utils.status_code( status )
+      res.write Rack::Utils::HTTP_STATUS_CODES[ res.status ]
+      res['Content-Type' ] = 'text/plain'
     end
 
     def write( obj, options = {} )
@@ -51,7 +52,6 @@ module CubaApi
       (aspects + self.class[ :aspects ]).uniq.each do |w|
         obj = send( w, obj, options ) if obj
       end
-p obj if obj.is_a? Hash
       res.write obj.to_s
     end
   end

@@ -1,4 +1,5 @@
 require 'ixtlan/babel/factory'
+require 'multi_json'
 module CubaApi
   module InputFilter
 
@@ -36,7 +37,7 @@ module CubaApi
 
     def parse_request_body
       if env[ 'CONTENT_TYPE' ] == 'application/json'
-        JSON.parse( req.body.read )
+        MultiJson.load( req.body.read )
       else
         {}
       end

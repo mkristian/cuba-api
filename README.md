@@ -7,6 +7,11 @@ cuba-api
 
 these are just a handful for [cuba](https://github.com/soveran/cuba) to use cuba as API server.
 
+security
+--------
+
+cuba-api installs the **safe_yaml** gem and will use it when you accept yaml input. installing **safe_yaml** is a bit invasiv, but better be on the safe side of things.
+
 cuba\_-api/config.rb
 ------------------
 
