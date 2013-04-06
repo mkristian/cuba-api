@@ -1,3 +1,4 @@
 Gemfile.lock
 *.gem
 target
+.*pom.xml
