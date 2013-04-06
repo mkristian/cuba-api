@@ -27,7 +27,7 @@ module CubaApi
     end
     
     def last_modified( last )
-      res[ 'Last-Modified' ] = last.rfc2822
+      res[ 'Last-Modified' ] = rfc2616( last )
     end
 
     def modified_since
@@ -39,12 +39,12 @@ module CubaApi
 
     def expires_in( minutes )
       now = DateTime.now
-      res[ 'Date' ] = now.rfc2822
-      res[ 'Expires' ] = ( now + minutes / 1440.0 ).rfc2822
+      res[ 'Date' ] = rfc2616( now )
+      res[ 'Expires' ] = rfc2616( now + minutes / 1440.0 )
     end
 
     def browser_only_cache
-      res[ 'Date' ] = DateTime.now.rfc2822
+      res[ 'Date' ] = rfc2616
       res[ 'Expires' ] = "Fri, 01 Jan 1990 00:00:00 GMT"
       res[ 'Cache-Control' ] = "private, max-age=0, must-revalidate"
     end
@@ -60,7 +60,7 @@ module CubaApi
     end
 
     def no_cache
-      res["Date"] = Time.now.rfc2822
+      res["Date"] = rfc2616
       res["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
       res["Pragma"] = "no-cache"
       res["Cache-Control"] = "no-cache, must-revalidate"
@@ -68,6 +68,10 @@ module CubaApi
 
     def content_type( mime )
       res[ 'Content-Type' ] = mime if mime
+    end
+
+    def rfc2616( time = DateTime.now )
+      time.to_time.utc.rfc2822.sub( /.....$/, 'GMT')
     end
   end
 end
