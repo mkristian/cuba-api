@@ -36,7 +36,7 @@ module CubaApi
     private :filter_params_and_keeps
 
     def parse_request_body
-      if env[ 'CONTENT_TYPE' ] == 'application/json'
+      if env[ 'CONTENT_TYPE' ] =~ /^application\/json/
         MultiJson.load( req.body.read )
       else
         {}
