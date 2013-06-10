@@ -19,6 +19,15 @@ module CubaApi
       end
     end
 
+    def to_boolean( name, default = nil )
+      v = req[ name ]
+      if v
+        v == 'true'
+      else
+        default
+      end
+    end
+
     def offset_n_limit( method, set )
       count = set.count
       offset = to_int( 'offset' ).to_i
@@ -27,7 +36,7 @@ module CubaApi
     end
     
     def last_modified( last )
-      res[ 'Last-Modified' ] = rfc2616( last )
+      res[ 'Last-Modified' ] = rfc2616( last ) if last
     end
 
     def modified_since
