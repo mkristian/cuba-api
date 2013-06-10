@@ -39,7 +39,7 @@ describe CubaApi::InputFilter do
 
   it 'no json input' do
      _, _, resp = Cuba.call({})
-    resp.join.must_be :empty?
+    resp.join.must.be :empty?
   end
 
   it 'json input with attr and without keep' do
@@ -57,7 +57,7 @@ describe CubaApi::InputFilter do
   it 'json input without attr and without keep' do
      _, _, resp = Cuba.call( 'CONTENT_TYPE' => 'application/json',
                              'rack.input' => StringIO.new( '{"something":"else"}' ) )
-    resp.join.must_be :empty?
+    resp.join.must.be :empty?
   end
 
   it 'json input without attr and with keep' do
