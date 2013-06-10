@@ -12,11 +12,13 @@ module CubaApi
     def new_instance( clazz, context = nil )
       clazz.new( params( clazz, context ) )
     end
-    
+    alias :new_instance_from_request :new_instance
+
     def params( clazz = nil, context = nil )
       filter_params_and_keeps( clazz, context )
       @_data[ 0 ] || {}
     end
+    alias :filtered_params :params
 
     def keeps( clazz = nil, context = nil )
       filter_params_and_keeps( clazz, context )
