@@ -8,7 +8,7 @@ module CubaApi
         elsif req.post?
           res.status = 201 # Created
           if obj.respond_to?( :id ) && ! res[ 'Location' ]
-            res[ 'Location' ] = env[ 'SCRIPT_NAME' ].to_s+ "/#{obj.id}"
+            res[ 'Location' ] = env[ 'SCRIPT_NAME' ].to_s + "/#{obj.id}"
           end
         elsif req.delete?
           res.status = 204 # No Content
