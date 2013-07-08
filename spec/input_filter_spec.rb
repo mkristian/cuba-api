@@ -27,12 +27,13 @@ describe CubaApi::InputFilter do
     Cuba.plugin CubaApi::InputFilter
     Cuba.define do
       on post do
-        attr = new_instance( D ).attributes
+        attr = req_filter( D ).new_model.attributes
         # whether hash is ordered-hash should not matter
         res.write attr.keys.sort.collect {|k| attr[k] }.join
       end
       on default do
-        res.write params( D, :update )['message'].to_s + keeps['age'].to_s
+        filter = req_filter( D, :update )
+        res.write filter.params['message'].to_s + filter.age.to_s
       end
     end
   end

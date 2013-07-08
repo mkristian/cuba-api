@@ -9,33 +9,15 @@ module CubaApi
       end
     end
 
-    def new_instance( clazz, context = nil )
-      clazz.new( params( clazz, context ) )
-    end
-    alias :new_instance_from_request :new_instance
-
-    def params( clazz = nil, context = nil )
-      filter_params_and_keeps( clazz, context )
-      @_data[ 0 ] || {}
-    end
-    alias :filtered_params :params
-
-    def keeps( clazz = nil, context = nil )
-      filter_params_and_keeps( clazz, context )
-      @_data[ 1 ] || {}
+    def req_filter( model = nil, context = nil )
+      @_filter ||=
+        begin
+          filter = self.class.factory.new_filter( model ).use( context )
+          filter.filter_it( parse_request_body )
+        end
     end
 
-    def filter_params_and_keeps( clazz, context )
-      if clazz
-        @_data ||= 
-          begin
-            filter = self.class.factory.new_filter( clazz ).use( context )
-            filter.filter_it( parse_request_body )
-          end
-      end
-      @_data ||= {}
-    end
-    private :filter_params_and_keeps
+    protected
 
     def parse_request_body
       if env[ 'CONTENT_TYPE' ] =~ /^application\/json/
@@ -44,6 +26,5 @@ module CubaApi
         {}
       end
     end
-    protected :parse_request_body
   end
 end
