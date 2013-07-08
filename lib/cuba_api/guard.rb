@@ -22,6 +22,7 @@
 
 module CubaApi
   module Guard
+    warn 'DEPRECATED: guard will disappear as it is now'
     def allowed?( *group_names )
       authenticated? && ( allowed_groups( *group_names ).size > 0 )
     end
