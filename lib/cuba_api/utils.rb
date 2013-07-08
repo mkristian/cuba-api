@@ -1,6 +1,11 @@
 module CubaApi
   module Utils
    
+    # matcher
+    def no_path
+      Proc.new { env[ 'PATH_INFO' ].empty? }
+    end
+
     def to_float( name, default = nil )
      v = req[ name ]
      if v
