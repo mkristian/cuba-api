@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 Gem::Specification.new do |s|
   s.name = 'cuba-api'
-  s.version = '0.3.4'
+  s.version = '0.4.0'
 
   s.summary = 'set of plugins for using cuba as API server'
   s.description = 'add content negogiation, serialization of objects (their attributes map), and some helpers for authentication + authorization to the cuba framework'
@@ -21,13 +21,12 @@ Gem::Specification.new do |s|
   s.test_files += Dir['spec/**/*_spec.rb']
 
   s.add_dependency 'cuba', '~> 3.1'
-  s.add_dependency 'ixtlan-babel', '~> 0.3'
+  s.add_dependency 'ixtlan-babel', '~> 0.4'
   s.add_dependency 'safe_yaml', '~> 0.8'
   s.add_dependency 'multi_json', '~> 1.6'
   s.add_development_dependency 'json', '~> 1.6'
-  s.add_development_dependency 'rake', '~> 10.0.3'
-  s.add_development_dependency 'copyright-header', '1.0.8'
-  s.add_development_dependency 'minitest', '~> 4.3'
+  s.add_development_dependency 'rake', '~> 10.0'
+  s.add_development_dependency 'minitest', '~> 4.0'
   s.add_development_dependency 'mustard', '~> 0.1'
   s.add_development_dependency 'backports', '~> 2.6'
 end
