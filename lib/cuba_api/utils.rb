@@ -6,6 +6,11 @@ module CubaApi
       Proc.new { env[ 'PATH_INFO' ].empty? }
     end
 
+    # matcher
+    def option
+      req.options?
+    end
+
     def to_float( name, default = nil )
      v = req[ name ]
      if v
