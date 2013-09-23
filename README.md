@@ -3,7 +3,7 @@ cuba-api
 
 * [![Build Status](https://secure.travis-ci.org/mkristian/cuba-api.png)](http://travis-ci.org/mkristian/cuba-api)
 * [![Dependency Status](https://gemnasium.com/mkristian/cuba-api.png)](https://gemnasium.com/mkristian/cuba-api)
-* [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/mkristian/cuba-api)
+* [![Code Climate](https://codeclimate.com/github/mkristian/cuba-api.png)](https://codeclimate.com/github/mkristian/cuba-api)
 
 these are just a handful for [cuba](https://github.com/soveran/cuba) to use cuba as API server.
 
