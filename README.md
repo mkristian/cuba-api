@@ -12,7 +12,7 @@ security
 
 cuba-api installs the **safe_yaml** gem and will use it when you accept yaml input. installing **safe_yaml** is a bit invasiv, but better be on the safe side of things.
 
-cuba\_-api/config.rb
+cuba\_api/config.rb
 ------------------
 
 this plugin adds configuration to cuba which inherits from its superclass. this is very similar to `Cuba.settings`.
@@ -52,6 +52,53 @@ some helper methods to manage a current_user n the session. needs a session-mana
 	  def from_session( session_data ) User.find_by_id( hash_data ); end
 	end
 
+cuba\_api/cors.rb 
+--------------------------
+
+setup CORS for you cuba, i.e.
+
+    Cuba.plugin CubaApi::Config
+    Cuba.plugin CubaApi::Cors
+    # optinal
+    Cuba.cors_setup do |cors|
+      cors.max_age = 123 # default: 86400
+      cors.methods = :put # default: all methods
+      cors.headers = 'x-requested-with' # default: all headers
+      cors.origins = 'http://middleearth' # default: all origins
+      cors.expose = 'x-requested-with' # default: nil
+    end
+
+that setup works fine with composition, i.e. each component has their own config and inherits from the parent component.
+
+there a two variations of the "on" block one that takes an extra first argument for the method(s), i.e.
+
+    on_cors_method [:post, :get], 'office/:me' do |me|
+      on post do
+        res.write "#{me} posted"
+      end
+    end
+
+    on_cors_method :delete, 'something' do
+      res.write "delete something"
+    end
+
+the method symbol get 'translated' into the checks for method like ```get```, ```post```, etc. when an CORS options request comes in the it will be answered with the respective 'Access-Control-' headers. especially the 'Access-Control-Allowed-Methods' is set appropriately.
+
+the second "on" block is less fine controlled
+
+    on_cors 'path/to/:who' do |who|
+      on post do
+        res.write "post from #{who}"
+      end
+    end
+	  
+    on_cors do
+      on put do
+        res.write "put answered"
+      end
+    end
+	  
+ here the 'Access-Control-Allowed-Methods' is set with the default from the ```cors_setup```.
 
 cuba\_api/guard.rb 
 --------------------------
@@ -69,7 +116,7 @@ simple authorization which assumes a user belongs to many groups and group has a
 Pending
 -------
 
-request payload needs to parse from json, yaml or xml into a hash.
+improve guard
 
 Contributing
 ------------

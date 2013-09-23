@@ -1,3 +1,8 @@
+# single spec setup
+$LOAD_PATH.unshift File.join( File.dirname( File.expand_path( File.dirname( __FILE__ ) ) ),
+                              'lib' )
+require 'minitest/autorun'
+
 require 'cuba'
 ENV["MT_NO_EXPECTATIONS"] = "true"
 
