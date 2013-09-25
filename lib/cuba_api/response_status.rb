@@ -5,6 +5,11 @@ module CubaApi
         if obj.respond_to?( :errors ) && obj.errors.size > 0
           res.status = 412 # Precondition Failed
           obj = obj.errors
+          if obj.respond_to? :to_hash
+            warn "[CubaApi::ResponseStatus] #{obj.to_hash.values.join( "\n" )}"
+          else
+            warn "[CubaApi::ResponseStatus] #{obj.inspect}"
+          end
         elsif req.post?
           res.status = 201 # Created
           if obj.respond_to?( :id ) && ! res[ 'Location' ]
