@@ -170,12 +170,14 @@ module CubaApi
         end
       else
         unless methods.nil?
-          allowed = methods.collect do |m|
+          allowed = methods.detect do |m|
             send m.to_sym
-          end.detect
-          args.insert( 0, allowed.first )
+          end
+          args.insert( 0, allowed != nil )
         end
-        args.insert( 0, cors.origins( env[ 'HTTP_ORIGIN' ] ) != nil )
+        if env[ 'HTTP_ORIGIN' ]
+          args.insert( 0, cors.origins( env[ 'HTTP_ORIGIN' ] ) != nil )
+        end
         on *args do |*vars|
           cors.allow_origin( env, res )
           yield( *vars )
