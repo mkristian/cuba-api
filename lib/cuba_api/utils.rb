@@ -7,10 +7,15 @@ module CubaApi
     end
 
     # matcher
+    def head
+      req.head?
+    end
+
     def option
       req.options?
     end
 
+    # params
     def to_float( name, default = nil )
      v = req[ name ]
      if v
