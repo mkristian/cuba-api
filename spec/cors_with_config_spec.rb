@@ -14,7 +14,7 @@ describe CubaApi::Cors do
         cors.max_age = 123
         cors.methods = :put
         cors.headers = 'x-requested-with'
-        cors.origins = 'http://middleearth'
+        cors.origins = 'middleearth'
         cors.expose = 'x-requested-with'
       end
       define do
