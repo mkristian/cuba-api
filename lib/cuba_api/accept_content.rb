@@ -51,7 +51,7 @@ module CubaApi
         res[ "Content-Type" ] = mime + "; charset=utf-8"
         obj.send self.class[ :mimes ][ mime ]
       else
-        head :not_found
+        no_body :not_found
         nil
       end
     end
