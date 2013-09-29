@@ -43,10 +43,12 @@ module CubaApi
     end
     
     def origins( domain )
-      host = URI.parse( domain ).host
-      origins = self._origins
-      if origins == [ '*' ] || origins.nil? || origins.member?( host )
-        domain
+      if domain
+        host = URI.parse( domain ).host
+        origins = self._origins
+        if origins == [ '*' ] || origins.nil? || origins.member?( host )
+          domain
+        end
       end
     end
 
