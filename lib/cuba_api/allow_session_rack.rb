@@ -1,13 +1,13 @@
 module CubaApi
-  class NoSessionRack
+  class AllowSessionRack
     def initialize( app, *not_pattern )
       @app = app
-      @reg_exp = /^\/#{not_pattern.join( ',^\/' )}/
+      @regexp = /^\/#{not_pattern.join( '|^\/' )}/
     end
     
     def call( env )
       status, headers, resp = @app.call( env )
-      if not( env[ 'PATH_INFO' ] =~ @regexp )
+      if not( env[ 'PATH_INFO' ].match @regexp )
         headers.delete( 'Set-Cookie' )
       end
       [ status, headers, resp ]
