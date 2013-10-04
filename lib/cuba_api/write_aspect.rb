@@ -39,12 +39,6 @@ module CubaApi
       end
     end
 
-    def no_body( status )
-      res.status = Rack::Utils.status_code( status )
-      res.write Rack::Utils::HTTP_STATUS_CODES[ res.status ]
-      res['Content-Type' ] = 'text/plain'
-    end
-
     def write( obj, options = {} )
       self.res.status = options[:status] || 200
       # make sure we inherit aspects and repsect the order
