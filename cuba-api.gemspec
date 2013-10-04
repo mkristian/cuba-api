@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 Gem::Specification.new do |s|
   s.name = 'cuba-api'
-  s.version = '0.5.1'
+  s.version = '0.6.0'
 
   s.summary = 'set of plugins for using cuba as API server'
   s.description = 'add content negogiation, serialization of objects (their attributes map), and some helpers for authentication + authorization to the cuba framework'
