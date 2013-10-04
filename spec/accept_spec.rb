@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'cuba_api/config'
+require 'cuba_api/utils'
 require 'cuba_api/write_aspect'
 require 'cuba_api/accept_content'
 require 'yaml'
@@ -15,6 +16,7 @@ describe CubaApi::AcceptContent do
   before do
     Cuba.reset!
     Cuba.plugin CubaApi::Config
+    Cuba.plugin CubaApi::Utils
     Cuba[ :aspects ] = []
     Cuba.plugin CubaApi::WriteAspect
     Cuba.plugin CubaApi::AcceptContent
