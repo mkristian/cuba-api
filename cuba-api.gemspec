@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'minitest', '~> 4.0'
   s.add_development_dependency 'mustard', '~> 0.1'
   s.add_development_dependency 'backports', '~> 2.6'
+  s.add_development_dependency 'ixtlan-user-management', '~> 0.2'
 end
 
 # vim: syntax=Ruby
