@@ -20,19 +20,86 @@
 #
 # -*- Coding: utf-8 -*-
 
+require 'ixtlan/user_management/guard'
+
+# TODO move to upstream
+class Ixtlan::UserManagement::Permission
+  attribute :parent, Ixtlan::UserManagement::Permission
+end
+
 module CubaApi
   module Guard
-    warn 'DEPRECATED: guard will disappear as it is now'
-    def allowed?( *group_names )
-      authenticated? && ( allowed_groups( *group_names ).size > 0 )
-    end
+    module ClassMethods
 
-    def allowed_groups( *group_names )
-      current_groups.select { |g| group_names.member?( g.name ) }
+      def guard( &block )
+        self[ :guard ] ||= block ||
+          begin
+            warn 'no guard configured. default guard denies eveythings !'
+            guard = Ixtlan::UserManagement::Guard.new
+            Proc.new do |groups|
+              guard
+            end
+          end
+      end
+      
     end
 
     def current_groups
       current_user.groups
     end
+
+    def allowed_associations
+      guard.associations( @_context, @_method )
+    end
+
+    def on_context( name, &block )
+      perm = guard.permissions( name )
+      if perm && perm.parent &&
+          perm.parent.resource !=  @_context
+        raise 'parent resource is not guarded'
+      end
+      on name do
+        old = @_context
+        @_context = name
+        yield( *captures )
+        @_context = old
+      end
+    end
+
+    def on_association
+      on :association do |association|
+        # TODO one method in guard
+        asso = guard.permissions( @_context ).associations
+        if asso.empty? or asso.include?( association )
+          yield( association )
+        else
+          no_body :forbidden 
+        end
+      end
+    end
+    
+    def on_guard( method, *args)
+      args.insert( 0, send( method ) )
+      on *args do
+        
+        @_method = method
+        
+        warn "[CubaApi::Guard] check #{method.to_s.upcase} #{@_context}: #{guard.allow?( @_context, method )}"
+        # TODO guard needs no association here
+        if guard.allow?( @_context, method, (allowed_associations || []).first )
+          
+          yield( *captures )
+        else
+          no_body :forbidden # 403
+        end
+      end
+    end
+
+    private
+
+    def guard
+      self.class.guard.call( current_groups )
+    end
+
   end
 end
