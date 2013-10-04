@@ -51,7 +51,7 @@ describe CubaApi::Guard do
           res.write "post"
         end
         on_guard :get do
-          res.write "get#{allowed_associations}"
+          res.write "get#{allowed_associations ? allowed_associations.inspect : nil}"
         end
         on_guard :put do
           res.write "put"
@@ -112,8 +112,9 @@ describe CubaApi::Guard do
 
       [ 'POST','PUT', 'DELETE' ].each do |m|
         env[ 'REQUEST_METHOD' ] = m
-        _, _, resp = Cuba.call( env )
-        resp.join.must.eq ''
+        status, _, resp = Cuba.call( env )
+        resp.must.be :empty?
+        status.must.eq 200
       end
     end
 
