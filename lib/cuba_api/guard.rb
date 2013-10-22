@@ -49,27 +49,27 @@ module CubaApi
     end
 
     def allowed_associations
-      guard.associations( @_context, @_method )
+      guard.associations( guard_context, @_method )
     end
 
     def on_context( name, &block )
       perm = guard.permissions( name )
       if perm && perm.parent &&
-          perm.parent.resource !=  @_context
+          perm.parent.resource !=  guard_context
         raise 'parent resource is not guarded'
       end
       on name do
-        old = @_context
-        @_context = name
+        old = guard_context
+        guard_context( name )
         yield( *captures )
-        @_context = old
+        guard_context( old )
       end
     end
 
     def on_association
       on :association do |association|
         # TODO one method in guard
-        asso = guard.permissions( @_context ).associations
+        asso = guard.permissions( guard_context ).associations
         if asso.empty? or asso.include?( association )
           yield( association )
         else
@@ -84,9 +84,9 @@ module CubaApi
         
         @_method = method
         
-        warn "[CubaApi::Guard] check #{method.to_s.upcase} #{@_context}: #{guard.allow?( @_context, method )}"
+        warn "[CubaApi::Guard] check #{method.to_s.upcase} #{guard_context}: #{guard.allow?( guard_context, method )}"
         # TODO guard needs no association here
-        if guard.allow?( @_context, method, (allowed_associations || []).first )
+        if guard.allow?( guard_context, method, (allowed_associations || []).first )
           
           yield( *captures )
         else
@@ -96,6 +96,14 @@ module CubaApi
     end
 
     private
+
+    def guard_context( ctx = nil )
+      if ctx
+        @_conetxt = (req.env[ 'guard_context' ] = ctx)
+      else
+        @_context ||= req.env[ 'guard_context' ]
+      end
+    end
 
     def guard
       self.class.guard.call( current_groups )
