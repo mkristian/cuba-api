@@ -58,7 +58,10 @@ module CubaApi
     end
     
     def last_modified( last )
-      res[ 'Last-Modified' ] = rfc2616( last ) if last
+      if last
+        res[ 'Last-Modified' ] = rfc2616( last )
+        res[ 'Cache-Control' ] = "private, max-age=0, must-revalidate"
+      end
     end
 
     def modified_since
