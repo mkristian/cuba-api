@@ -55,14 +55,17 @@ module CubaApi
     def on_context( name, &block )
       perm = guard.permissions( name )
       if perm && perm.parent &&
-          perm.parent.resource !=  guard_context
+          perm.parent.resource != guard_context
         raise 'parent resource is not guarded'
       end
       on name do
-        old = guard_context
-        guard_context( name )
-        yield( *captures )
-        guard_context( old )
+        begin
+          old = guard_context
+          guard_context( name )
+          yield( *captures )
+        ensure
+          guard_context( old )
+        end
       end
     end
 
