@@ -21,7 +21,8 @@ module CubaApi
 
     def parse_request_body
       if env[ 'CONTENT_TYPE' ] =~ /^application\/json/
-        MultiJson.load( req.body.read )
+        body = req.body.read
+        body.empty? ? {} : MultiJson.load( body )
       else
         {}
       end
