@@ -53,11 +53,7 @@ module CubaApi
     end
 
     def on_context( name, &block )
-      perm = guard.permissions( name )
-      if perm && perm.parent &&
-          perm.parent.resource != guard_context
-        raise 'parent resource is not guarded'
-      end
+      guard.check_parent( name, guard_context )
       on name do
         begin
           old = guard_context
@@ -71,8 +67,7 @@ module CubaApi
 
     def on_association
       on :association do |association|
-        # TODO one method in guard
-        asso = guard.permissions( guard_context ).associations
+        asso = guard.associations( guard_context )
         if asso.empty? or asso.include?( association )
           yield( association )
         else
