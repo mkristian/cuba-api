@@ -51,7 +51,7 @@ describe CubaApi::Guard do
           res.write "post"
         end
         on_guard :get do
-          res.write "get#{allowed_associations ? allowed_associations.inspect : nil}"
+          res.write "get#{allowed_associations.inspect.gsub( /\[\]/, '' )}"
         end
         on_guard :put do
           res.write "put"
@@ -83,10 +83,10 @@ describe CubaApi::Guard do
       env = { 'PATH_INFO' => '/users/accounts',
            'SCRIPT_NAME' => '/users/accounts' }
 
-      user = guard.permission( 'users' ) do |u|
+      user = guard.permission_for( 'users' ) do |u|
         u.allow_all
       end
-      guard.permission( 'admins' ) do |a|
+      guard.permission_for( 'admins' ) do |a|
         a.parent = user
         a.allow_all
       end
@@ -98,10 +98,10 @@ describe CubaApi::Guard do
     it 'allow all' do
       env = { 'PATH_INFO' => '/users/accounts',
            'SCRIPT_NAME' => '/users/accounts' }
-      user = guard.permission( 'users' ) do |u|
+      user = guard.permission_for( 'users' ) do |u|
         u.allow_all
       end
-      guard.permission( 'accounts' ) do |a|
+      guard.permission_for( 'accounts' ) do |a|
         a.parent = user
         a.allow_all
       end
@@ -129,7 +129,7 @@ describe CubaApi::Guard do
     end
 
     it 'denies all requests without associated id' do
-      guard.permission( 'users' ) do |u|
+      guard.permission_for( 'users' ) do |u|
         u.allow_all
       end
 
@@ -141,7 +141,7 @@ describe CubaApi::Guard do
     end
 
     it 'denies all requests with wrong associated id' do
-      guard.permission( 'users', 13 ) do |u|
+      guard.permission_for( 'users', 13 ) do |u|
         u.allow_all
       end
 
@@ -159,7 +159,7 @@ describe CubaApi::Guard do
     end
 
     it 'allows all requests with associated id' do
-      guard.permission( 'users', 42 ) do |u|
+      guard.permission_for( 'users', 42 ) do |u|
         u.allow_all
       end
 
@@ -188,7 +188,7 @@ describe CubaApi::Guard do
     end
 
     it 'allows all request' do
-      guard.permission( 'users' ) do |u|
+      guard.permission_for( 'users' ) do |u|
         u.allow_all
       end
 
@@ -200,7 +200,7 @@ describe CubaApi::Guard do
     end
 
     it 'allows retrieve' do
-      guard.permission( 'users' ) do |u|
+      guard.permission_for( 'users' ) do |u|
         u.allow_retrieve
       end
       
@@ -217,7 +217,7 @@ describe CubaApi::Guard do
     end
     
     it 'allows retrieve and create' do
-      guard.permission( 'users' ) do |u|
+      guard.permission_for( 'users' ) do |u|
         u.allow_retrieve
         u.allow_create
       end
@@ -234,7 +234,7 @@ describe CubaApi::Guard do
     end
 
     it 'allows retrieve and create and update' do
-      guard.permission( 'users' ) do |u|
+      guard.permission_for( 'users' ) do |u|
         u.allow_mutate
       end
       ['GET', 'POST','PUT' ].each do |m|
@@ -248,7 +248,7 @@ describe CubaApi::Guard do
     end
 
     it 'allows retrieve and create and update and delete' do
-      guard.permission( 'users' ) do |u|
+      guard.permission_for( 'users' ) do |u|
         u.allow_mutate
         u.allow_delete
       end
