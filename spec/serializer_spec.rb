@@ -1,7 +1,8 @@
 require 'spec_helper'
 require 'cuba_api/config'
-require 'cuba_api/write_aspect'
-require 'cuba_api/serializer'
+require 'cuba_api/loggers'
+require 'cuba_api/aspects'
+require 'cuba_api/aspects/serializer'
 require 'yaml'
 require 'ixtlan/babel/serializer'
 
@@ -24,7 +25,8 @@ describe CubaApi::Serializer do
     Cuba.reset!
     Cuba.plugin CubaApi::Config
     Cuba[ :aspects ] = []
-    Cuba.plugin CubaApi::WriteAspect
+    Cuba.plugin CubaApi::Loggers
+    Cuba.plugin CubaApi::Aspects
     Cuba.plugin CubaApi::Serializer
     Cuba.plugin ToYaml
     Cuba.append_aspect :to_yaml

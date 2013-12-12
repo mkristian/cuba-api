@@ -1,11 +1,12 @@
-require 'spec_helper'
-require 'cuba_api/allow_session_rack'
+# -*- coding: utf-8 -*-
+require File.expand_path( File.join( File.dirname( __FILE__), 'spec_helper' ) )
+require 'cuba_api/rack/allow_session_rack'
 
-describe CubaApi::AllowSessionRack do
+describe CubaApi::Rack::AllowSessionRack do
 
   before do
     Cuba.reset!
-    Cuba.use CubaApi::AllowSessionRack, 'session', 'system'
+    Cuba.use CubaApi::Rack::AllowSessionRack, 'session', 'system'
     Cuba.use Rack::Session::Cookie, :secret => 'secret'
     Cuba.define do
       on 'session' do

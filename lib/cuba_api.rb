@@ -21,23 +21,21 @@
 # -*- Coding: utf-8 -*-
 require "cuba"
 
-require 'cuba_api/write_aspect'
-require 'cuba_api/serializer'
-require 'cuba_api/current_user'
-require 'cuba_api/guard'
-require 'cuba_api/accept_content'
+require 'cuba_api/aspects'
+require 'cuba_api/aspects/serializer'
+require 'cuba_api/aspects/accept_content'
 require 'cuba_api/config'
+require 'cuba_api/loggers'
 require 'cuba_api/input_filter'
-require 'cuba_api/response_status'
+require 'cuba_api/aspects/response_status'
 
 class CubaAPI < Cuba
 
   plugin CubaApi::Config
-  plugin CubaApi::WriteAspect
+  plugin CubaApi::Loggers
+  plugin CubaApi::Aspects
   plugin CubaApi::Serializer
   plugin CubaApi::AcceptContent
-  plugin CubaApi::CurrentUser
-  plugin CubaApi::Guard
   plugin CubaApi::InputFilter
   plugin CubaApi::ResponseStatus
 

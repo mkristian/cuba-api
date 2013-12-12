@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'cuba_api/config'
-require 'cuba_api/write_aspect'
+require 'cuba_api/loggers'
+require 'cuba_api/aspects'
 
 module Plugin
   def one( obj, opts )
@@ -14,13 +15,14 @@ module Plugin
   end
 end
 
-describe CubaApi::WriteAspect do
+describe CubaApi::Aspects do
 
   before do
     Cuba.reset!
     Cuba.plugin CubaApi::Config
     Cuba[ :aspects ] = []
-    Cuba.plugin CubaApi::WriteAspect
+    Cuba.plugin CubaApi::Loggers
+    Cuba.plugin CubaApi::Aspects
     Cuba.plugin Plugin
     Cuba.append_aspect :one
     Cuba.prepend_aspect :two

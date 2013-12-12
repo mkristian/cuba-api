@@ -37,11 +37,15 @@ module CubaApi
             mimes[ mime ] = "to_#{arg}".to_sym
           end
         end
-        warn "[CubaAPI] Accept: #{mimes.keys.join(', ')}"
+        accept_logger.info { "Accept: #{mimes.keys.join(', ')}" }
       end
 
       def mimes
         self[ :mimes ] ||= {}
+      end
+
+      def accept_logger
+        logger_factory.logger( "CubaApi::AcceptContent" )
       end
     end
 
@@ -51,6 +55,7 @@ module CubaApi
         res[ "Content-Type" ] = mime + "; charset=utf-8"
         obj.send self.class[ :mimes ][ mime ]
       else
+        self.class.accept_logger.debug { "'#{mime}' not in allowed list #{self.class[ :mimes ].keys.inspect}" }
         no_body :not_found
         nil
       end

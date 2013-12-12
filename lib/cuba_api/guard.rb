@@ -34,7 +34,7 @@ module CubaApi
       def guard( &block )
         self[ :guard ] ||= block ||
           begin
-            warn 'no guard configured. default guard denies eveythings !'
+            guard_logger.warn { 'no guard configured. default guard denies everything !' }
             guard = Ixtlan::UserManagement::Guard.new
             Proc.new do |groups|
               guard
@@ -42,6 +42,9 @@ module CubaApi
           end
       end
       
+      def guard_logger
+        logger_factory.logger( "CubaApi::Guard" )
+      end
     end
 
     def current_groups
@@ -67,8 +70,7 @@ module CubaApi
 
     def on_association
       on :association do |association|
-        asso = guard.associations( guard_context )
-        if asso.empty? or asso.include?( association )
+        if allowed_associations && allowed_associations.include?( association )
           yield( association )
         else
           no_body :forbidden 
@@ -82,9 +84,16 @@ module CubaApi
         
         @_method = method
         
-        warn "[CubaApi::Guard] check #{method.to_s.upcase} #{guard_context}: #{guard.allow?( guard_context, method )}"
+        if allowed_associations && !allowed_associations.empty?
+          allowed = allowed_associations.select do |asso|
+            guard.allow?( guard_context, method, asso )
+          end.size > 0
+        else
+          allowed = guard.allow?( guard_context, method )
+        end
+        guard_logger.debug { "check #{method.to_s.upcase} #{guard_context}: #{allowed}" }
         # TODO guard needs no association here
-        if guard.allow?( guard_context, method, (allowed_associations || []).first )
+        if allowed
           
           yield( *captures )
         else
@@ -97,7 +106,7 @@ module CubaApi
 
     def guard_context( ctx = nil )
       if ctx
-        @_conetxt = (req.env[ 'guard_context' ] = ctx)
+        @_context = (req.env[ 'guard_context' ] = ctx)
       else
         @_context ||= req.env[ 'guard_context' ]
       end
@@ -107,5 +116,8 @@ module CubaApi
       self.class.guard.call( current_groups )
     end
 
+    def guard_logger
+      self.class.guard_logger
+    end
   end
 end

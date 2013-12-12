@@ -21,21 +21,27 @@
 # -*- Coding: utf-8 -*-
 
 module CubaApi
-  module WriteAspect
+  module Aspects
 
     module ClassMethods
       def append_aspect( arg )
         aspects << arg
-        warn "[CubaAPI] Appended aspect #{arg}"
+        aspects_logger.info { "Appended #{arg}" }
       end
 
       def prepend_aspect( arg )
         aspects.insert( 0, arg )
-        warn "[CubaAPI] Prepended aspect #{arg}"
+        aspects_logger.info { "Prepended #{arg}" }
       end
 
       def aspects
         self[ :aspects ] ||= []
+      end
+
+      private
+
+      def aspects_logger
+        logger_factory.logger( 'CubaAPI::Aspects' )
       end
     end
 

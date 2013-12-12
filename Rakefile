@@ -3,6 +3,7 @@
 task :default => [ :spec ]
 
 task :spec do
+  gem 'minitest'
   require 'minitest/autorun'
 
   $LOAD_PATH << "spec"

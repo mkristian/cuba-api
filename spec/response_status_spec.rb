@@ -1,7 +1,8 @@
 require 'spec_helper'
-require 'cuba_api/write_aspect'
+require 'cuba_api/aspects'
 require 'cuba_api/config'
-require 'cuba_api/response_status'
+require 'cuba_api/loggers'
+require 'cuba_api/aspects/response_status'
 
 class E
 
@@ -37,7 +38,8 @@ describe CubaApi::ResponseStatus do
   before do
     Cuba.reset!
     Cuba.plugin CubaApi::Config
-    Cuba.plugin CubaApi::WriteAspect
+    Cuba.plugin CubaApi::Loggers
+    Cuba.plugin CubaApi::Aspects
     Cuba.plugin CubaApi::ResponseStatus
     Cuba.define do
       on get do

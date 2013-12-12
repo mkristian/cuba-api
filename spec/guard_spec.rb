@@ -1,5 +1,6 @@
 require File.expand_path( File.join( File.dirname( __FILE__ ),
                                      'spec_helper.rb' ) )
+require 'cuba_api/loggers'
 require 'cuba_api/config'
 require 'cuba_api/utils'
 require 'cuba_api/guard'
@@ -12,6 +13,7 @@ describe CubaApi::Guard do
   before do
     Cuba.reset!
     Cuba.plugin CubaApi::Config
+    Cuba.plugin CubaApi::Loggers
     Cuba.plugin CubaApi::Utils
     Cuba.plugin CubaApi::Guard
     Cuba.define do
@@ -51,7 +53,7 @@ describe CubaApi::Guard do
           res.write "post"
         end
         on_guard :get do
-          res.write "get#{allowed_associations.inspect.gsub( /\[\]/, '' )}"
+          res.write "get#{allowed_associations.inspect.gsub( /nil/, '' )}"
         end
         on_guard :put do
           res.write "put"
@@ -130,7 +132,7 @@ describe CubaApi::Guard do
 
     it 'denies all requests without associated id' do
       guard.permission_for( 'users' ) do |u|
-        u.allow_all
+        u.allow_all( 42 )
       end
 
       ['GET', 'POST','PUT', 'DELETE' ].each do |m|

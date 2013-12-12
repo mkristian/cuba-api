@@ -1,8 +1,9 @@
 require 'spec_helper'
 require 'cuba_api/config'
+require 'cuba_api/loggers'
 require 'cuba_api/utils'
-require 'cuba_api/write_aspect'
-require 'cuba_api/accept_content'
+require 'cuba_api/aspects'
+require 'cuba_api/aspects/accept_content'
 require 'yaml'
 
 class B
@@ -16,9 +17,10 @@ describe CubaApi::AcceptContent do
   before do
     Cuba.reset!
     Cuba.plugin CubaApi::Config
+    Cuba.plugin CubaApi::Loggers
     Cuba.plugin CubaApi::Utils
     Cuba[ :aspects ] = []
-    Cuba.plugin CubaApi::WriteAspect
+    Cuba.plugin CubaApi::Aspects
     Cuba.plugin CubaApi::AcceptContent
     Cuba.accept :yaml
     Cuba.define do

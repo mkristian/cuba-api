@@ -6,9 +6,9 @@ module CubaApi
           res.status = 412 # Precondition Failed
           obj = obj.errors
           if obj.respond_to? :to_hash
-            warn "[CubaApi::ResponseStatus] #{obj.to_hash.values.join( "\n" )}"
+            status_logger.info { obj.to_hash.values.join( "\n" ) }
           else
-            warn "[CubaApi::ResponseStatus] #{obj.inspect}"
+            status_logger.info { obj.inspect }
           end
         elsif req.post?
           res.status = 201 # Created
@@ -25,6 +25,12 @@ module CubaApi
 
     def self.included( base )
       base.prepend_aspect :response_status
+    end
+
+    private
+
+    def status_logger
+      logger_factory.logger( "CubaApi::ResponseStatus" )
     end
   end
 end
