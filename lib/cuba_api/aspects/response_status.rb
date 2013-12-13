@@ -1,10 +1,10 @@
 module CubaApi
   module ResponseStatus
     def response_status( obj, options = {})
-      if options[:response_status] != false
-        handle_status( obj )
-      else
+      if options[ :response_status ] == false
         obj
+      else
+        handle_status( obj )
       end
     end
 
@@ -26,6 +26,8 @@ module CubaApi
       elsif req.delete?
         res.status = 204 # No Content
         ''
+      else
+        obj
       end
     end
 

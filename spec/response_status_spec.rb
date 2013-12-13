@@ -40,6 +40,7 @@ describe CubaApi::ResponseStatus do
     Cuba.plugin CubaApi::Config
     Cuba.plugin CubaApi::Loggers
     Cuba.plugin CubaApi::Aspects
+    Cuba.aspects.clear
     Cuba.plugin CubaApi::ResponseStatus
     Cuba.define do
       on get do
