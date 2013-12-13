@@ -1,9 +1,8 @@
 # single spec setup
-$LOAD_PATH.unshift 
-
-p File.join( File.dirname( File.expand_path( File.dirname( __FILE__ ) ) ),
+$LOAD_PATH.unshift File.join( File.dirname( File.expand_path( File.dirname( __FILE__ ) ) ),
                               'lib' )
 
+p $LOAD_PATH
 gem 'minitest'
 require 'minitest/autorun'
 
