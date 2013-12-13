@@ -5,7 +5,7 @@ cuba-api
 * [![Dependency Status](https://gemnasium.com/mkristian/cuba-api.png)](https://gemnasium.com/mkristian/cuba-api)
 * [![Code Climate](https://codeclimate.com/github/mkristian/cuba-api.png)](https://codeclimate.com/github/mkristian/cuba-api)
 
-these are just a handful for [cuba](https://github.com/soveran/cuba) to use cuba as API server.
+these are just a handful plugins for [cuba](https://github.com/soveran/cuba) it as API server.
 
 security
 --------
