@@ -84,13 +84,8 @@ module CubaApi
         
         @_method = method
         
-        if allowed_associations && !allowed_associations.empty?
-          allowed = allowed_associations.select do |asso|
-            guard.allow?( guard_context, method, asso )
-          end.size > 0
-        else
-          allowed = guard.allow?( guard_context, method )
-        end
+        allowed = allowed( method )
+
         guard_logger.debug { "check #{method.to_s.upcase} #{guard_context}: #{allowed}" }
         # TODO guard needs no association here
         if allowed
@@ -103,6 +98,16 @@ module CubaApi
     end
 
     private
+
+    def allowed( method )
+      if allowed_associations && !allowed_associations.empty?
+        allowed_associations.select do |asso|
+          guard.allow?( guard_context, method, asso )
+        end.size > 0
+      else
+        guard.allow?( guard_context, method )
+      end
+    end
 
     def guard_context( ctx = nil )
       if ctx
