@@ -163,6 +163,13 @@ module CubaApi
     end
 
     private
+    
+    def _cors_allowed?( cors, methods )
+      ( methods != nil && 
+        methods.detect { |m| send m.to_sym } != nil ) ||
+      ( env[ 'HTTP_ORIGIN' ] &&
+        cors.origins( env[ 'HTTP_ORIGIN' ] ) != nil )
+    end
 
     def _on_cors( methods = nil, *args )
       cors = ( self.class[ :cors ] ||= CORS.new( self.class ) )
@@ -172,16 +179,7 @@ module CubaApi
         on *args do
           cors.process( env, res, methods )
         end
-      else
-        unless methods.nil?
-          allowed = methods.detect do |m|
-            send m.to_sym
-          end
-          args.insert( 0, allowed != nil )
-        end
-        if env[ 'HTTP_ORIGIN' ]
-          args.insert( 0, cors.origins( env[ 'HTTP_ORIGIN' ] ) != nil )
-        end
+      elsif _cors_allowed?( cors, methods )
         on *args do |*vars|
           cors.allow_origin( env, res )
           yield( *vars )
