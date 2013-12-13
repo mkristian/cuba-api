@@ -2,25 +2,10 @@ module CubaApi
   module ResponseStatus
     def response_status( obj, options = {})
       if options[:response_status] != false
-        if obj.respond_to?( :errors ) && obj.errors.size > 0
-          res.status = 412 # Precondition Failed
-          obj = obj.errors
-          if obj.respond_to? :to_hash
-            status_logger.info { obj.to_hash.values.join( "\n" ) }
-          else
-            status_logger.info { obj.inspect }
-          end
-        elsif req.post?
-          res.status = 201 # Created
-          if obj.respond_to?( :id ) && ! res[ 'Location' ]
-            res[ 'Location' ] = env[ 'SCRIPT_NAME' ].to_s + "/#{obj.id}"
-          end
-        elsif req.delete?
-          res.status = 204 # No Content
-          obj = ''
-        end
+        handle_status( obj )
+      else
+        obj
       end
-      obj
     end
 
     def self.included( base )
@@ -28,6 +13,37 @@ module CubaApi
     end
 
     private
+
+    def handle_status( obj )
+      if obj.respond_to?( :errors ) && obj.errors.size > 0
+        res.status = 412 # Precondition Failed
+        log_errors( obj.errors )
+        obj.errors
+      elsif req.post?
+        res.status = 201 # Created
+        set_location( obj )
+        obj
+      elsif req.delete?
+        res.status = 204 # No Content
+        ''
+      end
+    end
+
+    def set_location( obj )
+      if obj.respond_to?( :id ) && ! res[ 'Location' ]
+        res[ 'Location' ] = env[ 'SCRIPT_NAME' ].to_s + "/#{obj.id}"
+      end
+    end
+    
+    def log_errors( errors )
+      status_logger.info do
+        if errors.respond_to? :to_hash
+          errors.to_hash.values.join( "\n" )
+        else
+          errors.inspect
+        end
+      end
+    end
 
     def status_logger
       logger_factory.logger( "CubaApi::ResponseStatus" )
