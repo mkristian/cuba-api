@@ -11,6 +11,10 @@ describe CubaApi::Cors do
     Cuba.plugin CubaApi::Cors
     Cuba.define do
 
+      on_cors 'no' do |who|
+        res.write "no"
+      end
+
       on_cors 'path/to/:who' do |who|
         on post do
           res.write "post from #{who}"
@@ -114,5 +118,15 @@ describe CubaApi::Cors do
     env[ 'REQUEST_METHOD' ] = 'POST'
     _, _, resp = Cuba.call( env )
     resp.join.must.eq 'frodo posted'
+  end
+
+  it 'should pass through on no cors' do
+    env[ 'HTTP_ORIGIN' ] = nil
+    env[ 'PATH_INFO' ] = '/no/frodo'
+    env[ 'SCRIPT_NAME' ] = '/no/frodo'
+    env[ 'REQUEST_METHOD' ] = 'GET'
+
+    _, _, resp = Cuba.call( env )
+    resp.join.must.eq 'no'
   end
 end

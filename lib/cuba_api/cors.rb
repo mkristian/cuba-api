@@ -179,7 +179,7 @@ module CubaApi
         on *args do
           cors.process( env, res, methods )
         end
-      elsif _cors_allowed?( cors, methods )
+      elsif _cors_allowed?( cors, methods ) != false # could be true or nil
         on *args do |*vars|
           cors.allow_origin( env, res )
           yield( *vars )
