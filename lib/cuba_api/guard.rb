@@ -23,6 +23,10 @@
 require 'ixtlan/user_management/guard'
 
 # TODO move to upstream
+class Ixtlan::UserManagement::GuardException < StandardError
+end
+
+# TODO move to upstream
 class Ixtlan::UserManagement::Permission
   attribute :parent, Ixtlan::UserManagement::Permission
 end
@@ -48,7 +52,11 @@ module CubaApi
     end
 
     def current_groups
-      current_user.groups
+      if current_user
+        current_user.groups 
+      else
+        []
+      end
     end
 
     def allowed_associations
@@ -56,12 +64,18 @@ module CubaApi
     end
 
     def on_context( name, &block )
-      guard.check_parent( name, guard_context )
       on name do
         begin
+          guard.check_parent( name, guard_context )
           old = guard_context
           guard_context( name )
           yield( *captures )
+        rescue Ixtlan::UserManagement::GuardException
+          if respond_to?( :authenticated? ) && authenticated?
+            no_body :not_found
+          else
+            no_body :forbidden
+          end
         ensure
           guard_context( old )
         end
