@@ -31,6 +31,25 @@ require 'cuba_api/aspects/response_status'
 
 class CubaAPI < Cuba
 
+  class Response < Cuba::Response
+
+    def self.new
+      Thread.current[ :cuba_api_response ] ||= super
+    end
+
+    def initialize( status = 404,
+                    headers = { "Content-Type" => "text/plain; charset=utf-8" } )
+      super
+    end
+
+    def finish
+      Thread.current[ :cuba_api_response ] = nil
+      super
+    end
+  end
+
+  settings[ :res ] = CubaAPI::Response
+
   plugin CubaApi::Config
   plugin CubaApi::Loggers
   plugin CubaApi::Aspects
