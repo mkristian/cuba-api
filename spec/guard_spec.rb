@@ -125,10 +125,9 @@ describe CubaApi::Guard do
 
   describe 'guarded context with association' do
 
-    let( :env ) do
-      { 'PATH_INFO' => '/users/42',
-        'SCRIPT_NAME' => '/users/42',
-      }
+   before do
+     env[ 'PATH_INFO' ] = '/users/42'
+     env[ 'SCRIPT_NAME'] = '/users/42'
     end
 
     it 'denies all requests without associated id' do
