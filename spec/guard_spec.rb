@@ -81,7 +81,7 @@ describe CubaApi::Guard do
 
   describe 'guarded context with nested context' do
     
-    it 'should raise error' do
+    it 'should response forbidden' do
       env = { 'PATH_INFO' => '/users/accounts',
            'SCRIPT_NAME' => '/users/accounts' }
 
@@ -94,7 +94,8 @@ describe CubaApi::Guard do
       end
 
       env[ 'REQUEST_METHOD' ] = 'GET'
-      lambda{ Cuba.call( env ) }.must_raise RuntimeError
+      status, _, _ = Cuba.call( env )
+      status.must.eq 403
     end
 
     it 'allow all' do
